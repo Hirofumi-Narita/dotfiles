@@ -35,7 +35,7 @@ let g:deoplete#enable_at_startup = 1
 " lightline.vim
 if !has('gui_running')
   set t_Co=256
-  endif
+endif
 
 "perl-local-lib-path.vim
 autocmd FileType perl PerlLocalLibPath
@@ -44,15 +44,17 @@ autocmd FileType perl PerlLocalLibPath
 " エンコード設定
 set encoding=utf-8
 " ペーストを有効
-set paste
+"set paste
 " 行を跨いで移動
 set whichwrap=h,l
+" 改行させる
+"set nowrap
+
+" search
 " 検索をリアルタイムにする
 set incsearch
 " 検索結果をハイライト
 set hlsearch
-" 改行させる
-"set nowrap
 " 検索を先頭に戻って行う
 set wrapscan
 
@@ -75,6 +77,11 @@ set showmatch
 set ruler
 " 行番号の色を白
 highlight LineNr ctermfg=255
+" 一行が長くても表示
+set display=lastline
+" 不可視文字を表示
+set list
+set listchars=tab:»-,trail:-,nbsp:%
 
 " indent
 " tabを空白入力にする
@@ -82,10 +89,31 @@ set expandtab
 " tabの空白数
 set tabstop=4
 " インデント時の文字数
-set shiftwidth=4
+"set shiftwidth=4
+
+" keymap
+" 行頭に移動
+nnoremap <C-a> ^
+" 行末に移動
+nnoremap <C-s> $
+" TABにて対応ペアにジャンプ
+nnoremap &lt;Tab&gt; %
+vnoremap &lt;Tab&gt; %
+" Ctrl + hjkl でウィンドウ間を移動
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+" 検索後にジャンプした際に検索単語を画面中央に持ってくる
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
 
 " ファイルのシンタックス設定
-augroup filetypedetect
+augroup filetypedetec
   autocmd BufNewFile,BufRead *.psgi   set filetype=perl
   autocmd BufNewFile,BufRead *.t      set filetype=perl
   autocmd BufNewFile,BufRead *.{html,htm,vue*} set filetype=html

@@ -14,6 +14,8 @@ eval "$(pyenv virtualenv-init -)"
 
 # python3 suport vim
 export XDG_CONFIG_HOME=~/.config
+# export NVIM_PYTHON_LOG_FILE=/tmp/log
+# export NVIM_PYTHON_LOG_LEVEL=DEBUG
 
 # 色を使用
 autoload -Uz colors
