@@ -1,21 +1,30 @@
-" start dein script------------
+"dein Scripts-----------------------------
 if &compatible
   set nocompatible
 endif
 
-" dein 本体
-set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+" dein.vim 本体
+" Required:
+set runtimepath+=/home/narita/.vim/dein/repos/github.com/Shougo/dein.vim
+let s:dein_dir = expand('~/.vim/dein')
 
-" plugin 読み込み
-if dein#load_state('~/.vim/dein')
-  call dein#begin('~/.vim/dein')  
+" 設定開始
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
 
-  call dein#add('Shougo/dein.vim')
+  " Let dein manage dein
   call dein#add('y-uuki/perl-local-lib-path.vim')
   call dein#add('itchyny/lightline.vim')
   call dein#add('Shougo/deoplete.nvim')
+  call dein#add('Shougo/denite.nvim')
+  call dein#add('scrooloose/nerdtree')
+  call dein#add('kchmck/vim-coffee-script')
+  call dein#add('jacoborus/tender.vim')
+  call dein#add('Haron-Prime/Antares')
 
-  call dein#end()
+" 設定終了
+call dein#end()
+call dein#save_state()
 endif
 
 filetype plugin indent on
@@ -25,20 +34,32 @@ syntax enable
 if dein#check_install()
   call dein#install()
 endif
-" end dein script------------
+"end dein Scripts-----------------------------
 
-" deoplete.nvim
-let g:python_host_prog = '/Users/narita/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog = '/Users/narita/.pyenv/versions/neovim3/bin/python'
+" Use deoplete.
+let g:python3_host_prog = '/usr/bin/python3'
 let g:deoplete#enable_at_startup = 1
 
-" lightline.vim
+" perl local path
+let g:perl_local_lib_path = "vendor/lib"
+autocmd FileType perl PerlLocalLibPath
+
+" power color
 if !has('gui_running')
-  set t_Co=256
+set t_Co=256
 endif
 
-"perl-local-lib-path.vim
-autocmd FileType perl PerlLocalLibPath
+colorscheme antares
+
+augroup filetypedetect
+autocmd BufNewFile,BufRead *.psgi            set filetype=perl
+autocmd BufNewFile,BufRead *.t               set filetype=perl
+autocmd! BufNewFile,BufRead *.tt             set filetype=html
+autocmd BufNewFile,BufRead *.{html,htm,vue*} set filetype=html
+autocmd BufNewFile,BufRead *.coffee          set filetype=coffee
+autocmd BufNewFile,BufRead *.tx              set filetype=tt2html
+autocmd FileType {html,coffee,javascript}    setlocal sw=2 sts=2 ts=2 et
+augroup END
 
 " setting
 " エンコード設定
@@ -64,7 +85,7 @@ syntax on
 " 入力中のコマンド表示
 set showcmd
 " 行番号表示
-set number   
+set number---
 " カーソル行の背景色
 set cursorline
 " ステータス行を常に表示
@@ -89,7 +110,7 @@ set expandtab
 " tabの空白数
 set tabstop=4
 " インデント時の文字数
-"set shiftwidth=4
+set shiftwidth=4
 
 " keymap
 " 行頭に移動
@@ -97,14 +118,9 @@ nnoremap <C-a> ^
 " 行末に移動
 nnoremap <C-s> $
 " TABにて対応ペアにジャンプ
-nnoremap &lt;Tab&gt; %
-vnoremap &lt;Tab&gt; %
-" Ctrl + hjkl でウィンドウ間を移動
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-" 検索後にジャンプした際に検索単語を画面中央に持ってくる
+nnoremap <tab> %
+vnoremap <tab> %
+"検索後にジャンプした際に検索単語を画面中央に持ってくる
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap * *zz
@@ -112,9 +128,33 @@ nnoremap # #zz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
-" ファイルのシンタックス設定
-augroup filetypedetec
-  autocmd BufNewFile,BufRead *.psgi   set filetype=perl
-  autocmd BufNewFile,BufRead *.t      set filetype=perl
-  autocmd BufNewFile,BufRead *.{html,htm,vue*} set filetype=html
-augroup END
+"xでヤンクが上書きされないようにする
+noremap PP "0p
+noremap x "_x
+
+set mouse=n
+
+syntax on
+highlight LineNr ctermfg=255
+
+nnoremap <C-j> <C-d>
+nnoremap <C-k> <C-u>
+inoremap <tab> <C-n>
+
+" key map
+map <C-n> :NERDTreeToggle<CR>
+map <C-u> :Denite file_rec<CR>
+map <C-t> :tabnew ./<CR>
+
+" set number key map
+function Setnumber()
+  if &number
+    setlocal nonumber
+    setlocal mouse=c
+  else
+    setlocal number
+    setlocal mouse=n
+  endif
+endfunction
+nnoremap <silent> <C-m> :call Setnumber()<CR>
+
