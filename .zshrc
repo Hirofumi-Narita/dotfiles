@@ -1,21 +1,23 @@
-# plenv
+export LANG=ja_JP.UTF-8
+
+## plenv
 export PATH="$HOME/.plenv/bin:$PATH"
 eval "$(plenv init -)"
 
-# rbenv
+## rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+## ndenv
+export PATH="$HOME/.ndenv/bin:$PATH"
+eval "$(ndenv init -)"
+
+# anyenv
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
 
 # python3 suport vim
 export XDG_CONFIG_HOME=~/.config
-# export NVIM_PYTHON_LOG_FILE=/tmp/log
-# export NVIM_PYTHON_LOG_LEVEL=DEBUG
 
 # 色を使用
 autoload -Uz colors
@@ -46,3 +48,47 @@ zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 precmd () { vcs_info }
 RPROMPT=$RPROMPT'${vcs_info_msg_0_}'
+
+# ヒストリーに重複を表示しない
+setopt histignorealldups
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+# cdコマンドを省略して、ディレクトリ名のみの入力で移動
+setopt auto_cd
+
+# 自動でpushdを実行
+setopt auto_pushd
+
+# pushdから重複を削除
+setopt pushd_ignore_dups
+
+# グローバルエイリアス
+alias -g L='| less'
+alias -g H='| head'
+alias -g G='| grep'
+alias -g GI='| grep -ri'
+
+# エイリアス
+alias lst='ls -ltr --color=auto'
+alias l='ls -ltr --color=auto'
+alias la='ls -la --color=auto'
+alias ll='ls -l --color=auto'
+alias so='source'
+alias v='vim'
+alias vi='vim'
+alias vz='vim ~/.zshrc'
+alias c='cdr'
+
+# 区切り文字の設定
+autoload -Uz select-word-style
+select-word-style default
+zstyle ':zle:*' word-chars "_-./;@"
+zstyle ':zle:*' word-style unspecified
+
+# tender settings
+if (has("termguicolors"))
+    set termguicolors
+endif
+let g:cpp_class_scope_highlight = 1
